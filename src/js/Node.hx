@@ -13,6 +13,11 @@
 
 package js;
 
+import haxe.Constraints.Function;
+import js.Node.NodeEventEmitter;
+
+typedef NodeHttpServerClientException = Dynamic;
+
 typedef NodeListener = Dynamic;
 typedef NodeErr = Null<String>;
 
@@ -635,8 +640,10 @@ typedef NodeAgent = { > NodeEventEmitter,
 }
 
 typedef NodeHttp = {
-	function createServer(listener:NodeHttpServerReq->NodeHttpServerResp->Void):NodeHttpServer;
-	function createClient(port:Int,host:String):NodeHttpClient;
+	function createServer(?listener:NodeHttpServerReq->NodeHttpServerResp->Void):NodeHttpServer;
+	
+	@:deprecated function createClient(?port:Int,?host:String):NodeHttpClient;
+	
 	@:overload(function(parsedUrl:NodeUrlObj,res:NodeHttpClientResp->Void):NodeHttpClientReq {})
 	function request(options:NodeHttpReqOpt,res:NodeHttpClientResp->Void):NodeHttpClientReq;
 	@:overload(function(parsedUrl:NodeUrlObj,res:NodeHttpClientResp->Void):Void {})
@@ -885,6 +892,8 @@ class NodeC {
 	public static inline var EVENT_HTTPSERVER_CONNECTION = "connection";
 	public static inline var EVENT_HTTPSERVER_CLOSE = "close";
 	public static inline var EVENT_HTTPSERVER_UPGRADE = "upgrade";
+	public static inline var EVENT_HTTPSERVER_CHECKCONTINUE = "checkContinue";
+	public static inline var EVENT_HTTPSERVER_CONNECT = "connect";
 	public static inline var EVENT_HTTPSERVER_CLIENTERROR = "clientError";
 	public static inline var EVENT_HTTPSERVERREQUEST_DATA = "data";
 	public static inline var EVENT_HTTPSERVERREQUEST_END = "end";
@@ -902,6 +911,29 @@ class NodeC {
 	public static inline var FILE_READWRITE_APPEND = "a+";
 }
 
+/**
+ emitts: error, 
+*/
+
+typedef NodeDomain = { > NodeEventEmitter,
+	function run (f:Function):Void;
+	var members : Array<Dynamic>;
+
+	function add(emitter:NodeEventEmitter):Void;
+	function remove(emitter:NodeEventEmitter):Void;
+	function bind<Callback:Function>(f:Callback):Callback;
+	function intercept<Callback:Function>(f:Callback):Callback;
+	function enter():Void;
+	function exit():Void;
+	function dispose():Void;
+
+
+}
+
+typedef NodeDomainCommands = {
+	function create ():NodeDomain;
+}
+
 class Node {
 	public static var assert(get,null) : NodeAssert;
 	public static var childProcess(get,null) : NodeChildProcessCommands;
@@ -911,6 +943,7 @@ class Node {
 	public static var dgram(get,null) :NodeUDP ;
 	public static var dns(get,null) : NodeDns;
 	public static var fs(get,null) : NodeFS;
+	public static var domain(get,null) : NodeDomainCommands;
 	public static var http(get,null) : NodeHttp;
 	public static var https(get,null) : NodeHttps;
 	public static var net(get,null) : NodeNet;
@@ -948,6 +981,7 @@ class Node {
 	static inline function get_dgram() : NodeUDP return require("dgram");
 	static inline function get_dns() : NodeDns return require("dns");
 	static inline function get_fs() : NodeFS return require("fs");
+	static inline function get_domain() : NodeDomainCommands return require("domain");
 	static inline function get_http() : NodeHttp return require("http");
 	static inline function get_https() : NodeHttps return require("https");
 	static inline function get_net() : NodeNet return require("net");
