@@ -40,7 +40,9 @@ extern class MysqlConnection
 
 	public function pause ():Void;
 	public function resume ():Void;
-		
+	
+	public function format (sql:String, values:Dynamic):String;
+
 	public function escape (v:Dynamic):EscapedValue;
 	public function escapeId (v:Dynamic):EscapedValue;
 
@@ -93,6 +95,8 @@ class Mysql {
 	// TODO createPoolCluster
 	public static function createConnection (options:MysqlConnectionOptions):MysqlConnection;
 	public static function createPool(options:MysqlPoolOptions):MysqlPool;
+
+	
 
 	private static inline function __init__(): Void untyped {
 
