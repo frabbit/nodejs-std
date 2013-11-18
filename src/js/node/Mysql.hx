@@ -88,7 +88,7 @@ typedef MysqlPoolOptions = { > MysqlConnectionOptions,
 	?queueLimit : Int
 }
 
-@:native("js_node_Mysql")
+
 extern 
 class Mysql {
 
@@ -96,11 +96,12 @@ class Mysql {
 	public static function createConnection (options:MysqlConnectionOptions):MysqlConnection;
 	public static function createPool(options:MysqlPoolOptions):MysqlPool;
 
+	public static function format (sql:String, values:Dynamic):String;
 	
 
 	private static inline function __init__(): Void untyped {
 
-		var js_node_Mysql = Node.require("mysql");
+		Mysql = Node.require("mysql");
 	}
 
 }
