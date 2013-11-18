@@ -525,7 +525,8 @@ typedef NodeNetSocket = { > NodeEventEmitter,
 	var bufferSize:Int;
 	var bytesRead:Int;
 	var bytesWritten:Int;
-
+	var encrypted:Null<Bool>;
+	
 	@:overload(function(path:String,?cb:Void->Void):Void {})
 	@:overload(function(options:NodeConnectionOpt,connectionListener:Void->Void):Void {})
 	function connect(port:Int,?host:String,?cb:Void->Void):Void;
