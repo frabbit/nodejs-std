@@ -10,16 +10,27 @@ import haxe.Constraints.Function;
  Error -> Rows -> Fields -> Void
  */
 
-typedef QueryError = Dynamic
-typedef QueryRow = Dynamic
-typedef QueryRows = Array<QueryRow>
-typedef QueryFields = Dynamic
+typedef QueryError = Dynamic;
+typedef QueryRow = Dynamic;
+typedef QueryRows = Array<QueryRow>;
+typedef QueryFields = Dynamic;
+typedef QueryResultData = Dynamic;
+abstract QueryResult(Dynamic) {
+	public function asRows ():Array<QueryRow> {
+		return this;
+	}
+	public function asResultData ():QueryResultData {
+		return this;
+	}
 
+}
 typedef MysqlErr = Dynamic;
 
 typedef ConnectionError = Dynamic;
 
-typedef QueryCallback = QueryError -> QueryRows -> QueryFields -> Void
+typedef QueryCallback = QueryError -> QueryResult -> QueryFields -> Void
+
+
 
 abstract EscapedValue(Dynamic) {
 	inline function new (d:Dynamic) this = d;
@@ -33,6 +44,8 @@ extern class MysqlConnection
 	@:overload(function (q:String, escaped:Array<Dynamic>, cb:QueryCallback):Void {})
 	public function query (q:String, cb:QueryCallback):Void;
 
+
+
 	public function end (cb:ConnectionError->Void):Void;
 	public function destroy ():Void;
 
@@ -45,6 +58,11 @@ extern class MysqlConnection
 
 	public function escape (v:Dynamic):EscapedValue;
 	public function escapeId (v:Dynamic):EscapedValue;
+
+	public function beginTransaction (f:MysqlErr->Void):Void;
+
+	public function commit(f:MysqlErr->Void):Void;
+	public function rollback(f:Void->Void):Void;
 
 	function on (event:String, cb:Function):MysqlConnection;
 
