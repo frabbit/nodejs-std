@@ -14,12 +14,24 @@ typedef QueryError = Dynamic;
 typedef QueryRow = Dynamic;
 typedef QueryRows = Array<QueryRow>;
 typedef QueryFields = Dynamic;
-typedef QueryResultData = Dynamic;
+typedef QueryResultData = {
+	fieldCount: Int,
+    affectedRows: Int,
+    insertId: Dynamic,
+    serverStatus: Int,
+    warningCount: Int,
+    message: String,
+    protocol41: Bool,
+    changedRows: Int
+};
 abstract QueryResult(Dynamic) {
 	public function asRows ():Array<QueryRow> {
 		return this;
 	}
 	public function asResultData ():QueryResultData {
+		return this;
+	}
+	public function asResultDataList ():Array<QueryResult> {
 		return this;
 	}
 
@@ -85,7 +97,9 @@ typedef MysqlConnectionOptions = {
 	password : String,
 	?port : Int,
 	?database : String,
-	?multipleStatements: Bool
+	?multipleStatements: Bool,
+	?debug:Bool
+
 	// more options see https://github.com/frabbit/node-mysql/tree/kp
 }
 
