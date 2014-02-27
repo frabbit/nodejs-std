@@ -2,6 +2,7 @@
 package js.node;
 
 import haxe.Constraints.Function;
+import Type.ValueType.TClass;
 
 
 
@@ -25,13 +26,19 @@ typedef QueryResultData = {
     changedRows: Int
 };
 abstract QueryResult(Dynamic) {
-	public function asRows ():Array<QueryRow> {
+	public function asRows ():Array<QueryRow> 
+	{
+		if (!Std.is(this, Array)) throw "array expected";
 		return this;
 	}
-	public function asResultData ():QueryResultData {
+	public function asResultData ():QueryResultData 
+	{
+		if (!Reflect.isObject(this)) throw "object expected";
 		return this;
 	}
-	public function asResultDataList ():Array<QueryResult> {
+	public function asResultDataList ():Array<QueryResult> 
+	{
+		if (!Std.is(this, Array)) throw "array expected";
 		return this;
 	}
 
