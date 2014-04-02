@@ -26,19 +26,16 @@ typedef QueryResultData = {
     changedRows: Int
 };
 abstract QueryResult(Dynamic) {
-	public function asRows ():Array<QueryRow> 
+	public inline function asRows ():Array<QueryRow>
 	{
-		if (!Std.is(this, Array)) throw "array expected";
 		return this;
 	}
-	public function asResultData ():QueryResultData 
+	public inline function asResultData ():QueryResultData
 	{
-		if (!Reflect.isObject(this)) throw "object expected";
 		return this;
 	}
-	public function asResultDataList ():Array<QueryResult> 
+	public inline function asResultDataList ():Array<QueryResult>
 	{
-		if (!Std.is(this, Array)) throw "array expected";
 		return this;
 	}
 
@@ -57,7 +54,7 @@ abstract EscapedValue(Dynamic) {
 	@:to public inline function toString ():String return this;
 }
 
-extern class MysqlConnection 
+extern class MysqlConnection
 {
 	public function connect ():Void;
 	@:overload(function (q:String, escaped:Array<Dynamic>, cb:QueryCallback):Void {})
@@ -72,7 +69,7 @@ extern class MysqlConnection
 
 	public function pause ():Void;
 	public function resume ():Void;
-	
+
 	public function format (sql:String, values:Dynamic):String;
 
 	public function escape (v:Dynamic):EscapedValue;
@@ -94,7 +91,7 @@ extern class MysqlConnection
 	}
 	public inline function onResult(f:QueryRow->Void):MysqlConnection {
 		return on("result", f);
-	}	
+	}
 
 }
 
@@ -128,7 +125,7 @@ typedef MysqlPoolOptions = { > MysqlConnectionOptions,
 }
 
 
-extern 
+extern
 class Mysql {
 
 	// TODO createPoolCluster
@@ -136,7 +133,7 @@ class Mysql {
 	public static function createPool(options:MysqlPoolOptions):MysqlPool;
 
 	public static function format (sql:String, values:Dynamic):String;
-	
+
 
 	private static inline function __init__(): Void untyped {
 
