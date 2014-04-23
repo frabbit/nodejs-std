@@ -34,7 +34,12 @@ abstract QueryResult(Dynamic) {
 	{
 		return this;
 	}
-	public inline function asResultDataList ():Array<QueryResult>
+	public inline function asResultList ():Array<QueryResult>
+	{
+		return this;
+	}
+
+	public inline function asResultDataList ():Array<QueryResultData>
 	{
 		return this;
 	}
